@@ -1,11 +1,19 @@
-# SpendWise Dashboard Shell (Week 4 Project)
+# SpendWise Pro - JavaScript Foundation (Week 6)
 
-A modern, responsive financial dashboard shell built using **CSS Grid** and **Flexbox** as part of the ILO Software Engineering Training (PLP).
+A professional, feature-rich financial tracking application developed as part of the ILO Software Engineering Training (PLP). This milestone introduces a robust **JavaScript Foundation**, elevating SpendWise from a static visual layout to an interactive data-processing application.
 
-## Features Built
-1. **Dashboard Layout:** Features a dedicated sidebar navigation menu, top header, and a responsive grid of 6 category financial cards.
-2. **Modern CSS Techniques:** Uses **CSS Grid** for overall layout and **Flexbox** for internal alignments.
-3. **CSS Custom Properties (`:root`):** Consistent color palette using custom variables.
-4. **Responsive Design:** Includes media queries for screens below 768px.
-5. **Micro-interactions:** Smooth hover and keyboard focus states within 250ms.
-6. **Dark Theme Support:** Automatic dark theme styling via `@media (prefers-color-scheme: dark)`.
+## 🚀 What SpendWise Does
+SpendWise is designed to help users manage personal finance by tracking budgets, categorizing monthly expenses, and calculating real-time remaining financial balances and financial health status dynamically.
+
+## 🧠 JavaScript Concepts Implemented
+1. **Variables & Data Types:** Utilized `const` for static app configuration and `let` for dynamic user financial records (`userProfile`, `expenseCategories`).
+2. **User Input Collection:** Integrated both interactive browser `prompt()` dialogs and dynamic HTML input fields to capture user financial data seamlessly.
+3. **Calculations & Logic:** Implemented custom mathematical operations (`budget - expenses`) to compute remaining balances instantly.
+4. **Reusable Functions:** Created modular functions (`calculateRemainingBalance`, `formatCurrency`, `evaluateFinancialHealth`, `processAndDisplayResults`) to maintain clean separation of concerns and code reusability.
+5. **Console Logging & DOM Manipulation:** Logged structured, color-coded diagnostic reports to the browser console using `console.group()` while dynamically updating the user interface in real-time.
+
+## 💻 Project File Structure
+- `index.html` - Enhanced semantic markup with interactive input controls.
+- `style.css` - Custom styles, CSS variables, and dark mode support.
+- `script.js` - Core JavaScript logic, event listeners, and calculation engines.
+- `README.md` - Complete technical and project documentation.

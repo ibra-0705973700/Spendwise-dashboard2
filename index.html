@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpendWise Dashboard</title>
+    <title>SpendWise Pro - Financial Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,6 +12,7 @@
         <aside class="sidebar">
             <div class="logo">
                 <h2>Spend<span>Wise</span></h2>
+                <span class="version-badge">Pro v2.0</span>
             </div>
             <nav class="nav-menu">
                 <a href="#" class="nav-item active">Dashboard</a>
@@ -27,8 +28,8 @@
             <!-- Header -->
             <header class="header">
                 <div class="header-title">
-                    <h1>Dashboard Overview</h1>
-                    <p>Welcome back, Ibrahim!</p>
+                    <h1>Financial Command Center</h1>
+                    <p>Welcome back, Ibrahim! Here is your financial overview.</p>
                 </div>
                 <div class="user-profile">
                     <span class="avatar">II</span>
@@ -36,9 +37,29 @@
                 </div>
             </header>
 
+            <!-- Interactive Budget Control Panel (Beyond Assignment feature) -->
+            <section class="control-panel card">
+                <h2>Live Budget & Expense Calculator</h2>
+                <p class="text-muted">Enter your financial details below or trigger interactive prompts via console/inputs.</p>
+                <div class="input-group-row">
+                    <div class="input-field">
+                        <label for="monthlyBudget">Total Monthly Budget ($)</label>
+                        <input type="number" id="monthlyBudget" value="5000" placeholder="e.g. 5000">
+                    </div>
+                    <div class="input-field">
+                        <label for="totalExpenses">Total Expenses ($)</label>
+                        <input type="number" id="totalExpenses" value="1845.70" placeholder="e.g. 1500">
+                    </div>
+                    <button id="calculateBtn" class="btn-primary">Calculate Balance</button>
+                </div>
+                <div id="resultDisplay" class="result-box">
+                    <span>Remaining Balance: <strong id="balanceOutput">$3,154.30</strong></span>
+                    <span id="statusMessage" class="status-badge success">On Track</span>
+                </div>
+            </section>
+
             <!-- Dashboard Cards Grid -->
             <section class="cards-grid">
-                <!-- Card 1 -->
                 <div class="card" tabindex="0">
                     <div class="card-header">
                         <h3>Food & Dining</h3>
@@ -47,8 +68,6 @@
                     <p class="card-amount">$450.00</p>
                     <span class="card-footer text-muted">12 transactions this month</span>
                 </div>
-
-                <!-- Card 2 -->
                 <div class="card" tabindex="0">
                     <div class="card-header">
                         <h3>Transport</h3>
@@ -57,8 +76,6 @@
                     <p class="card-amount">$180.50</p>
                     <span class="card-footer text-muted">8 transactions this month</span>
                 </div>
-
-                <!-- Card 3 -->
                 <div class="card" tabindex="0">
                     <div class="card-header">
                         <h3>Rent & Housing</h3>
@@ -67,8 +84,6 @@
                     <p class="card-amount">$1,200.00</p>
                     <span class="card-footer text-muted">Due on the 1st</span>
                 </div>
-
-                <!-- Card 4 -->
                 <div class="card" tabindex="0">
                     <div class="card-header">
                         <h3>Entertainment</h3>
@@ -77,8 +92,6 @@
                     <p class="card-amount">$95.00</p>
                     <span class="card-footer text-muted">Subscriptions & movies</span>
                 </div>
-
-                <!-- Card 5 -->
                 <div class="card" tabindex="0">
                     <div class="card-header">
                         <h3>Savings</h3>
@@ -87,8 +100,6 @@
                     <p class="card-amount">$3,400.00</p>
                     <span class="card-footer text-muted">+15% from last month</span>
                 </div>
-
-                <!-- Card 6 -->
                 <div class="card" tabindex="0">
                     <div class="card-header">
                         <h3>Utilities</h3>
@@ -100,5 +111,8 @@
             </section>
         </main>
     </div>
+
+    <!-- Linked JavaScript File -->
+    <script src="script.js" defer></script>
 </body>
 </html>
