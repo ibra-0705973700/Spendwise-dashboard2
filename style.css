@@ -1,13 +1,13 @@
 :root {
-    --bg-color: #f4f7fa;
+    --bg-color: #f4fbf7;
     --card-bg: #ffffff;
-    --sidebar-bg: #0f172a;
+    --sidebar-bg: #064e3b; /* Deep Professional Forest Green */
     --text-primary: #1e293b;
     --text-secondary: #64748b;
-    --brand-color: #2563eb;
-    --accent-color: #38bdf8;
-    --border-color: #e2e8f0;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    --brand-color: #059669; /* Vibrant Emerald Green */
+    --accent-color: #34d399; /* Mint Accent */
+    --border-color: #d1fae5;
+    --shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.08);
 }
 
 * {
@@ -44,7 +44,7 @@ body {
 
 .version-badge {
     font-size: 0.75rem;
-    background: rgba(56, 189, 248, 0.15);
+    background: rgba(52, 211, 153, 0.2);
     color: var(--accent-color);
     padding: 2px 8px;
     border-radius: 12px;
@@ -57,7 +57,7 @@ body {
 }
 
 .nav-item {
-    color: #cbd5e1;
+    color: #a7f3d0;
     text-decoration: none;
     padding: 10px 14px;
     border-radius: 8px;
@@ -65,7 +65,7 @@ body {
 }
 
 .nav-item.active, .nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.12);
     color: white;
 }
 
@@ -185,11 +185,11 @@ body {
 }
 
 .btn-primary:hover {
-    opacity: 0.92;
+    background-color: #047857;
 }
 
 .btn-secondary {
-    background-color: var(--text-primary);
+    background-color: var(--sidebar-bg);
     color: white;
     border: none;
     padding: 6px 12px;
@@ -281,8 +281,8 @@ body {
 
 .category-tag {
     font-size: 0.78rem;
-    background-color: #e0f2fe;
-    color: #0369a1;
+    background-color: #d1fae5;
+    color: #065f46;
     padding: 3px 8px;
     border-radius: 6px;
     font-weight: 600;
