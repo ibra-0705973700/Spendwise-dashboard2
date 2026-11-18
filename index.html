@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpendWise Pro - Financial Dashboard</title>
+    <title>SpendWise Pro - Interactive Financial Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,14 +12,12 @@
         <aside class="sidebar">
             <div class="logo">
                 <h2>Spend<span>Wise</span></h2>
-                <span class="version-badge">Pro v2.0</span>
+                <span class="version-badge">Pro v3.0</span>
             </div>
             <nav class="nav-menu">
                 <a href="#" class="nav-item active">Dashboard</a>
-                <a href="#" class="nav-item">Transactions</a>
-                <a href="#" class="nav-item">Budgets</a>
-                <a href="#" class="nav-item">Analytics</a>
-                <a href="#" class="nav-item">Settings</a>
+                <a href="#transactionsSection" class="nav-item">Transactions</a>
+                <a href="#budgetSection" class="nav-item">Budgets</a>
             </nav>
         </aside>
 
@@ -28,85 +26,86 @@
             <!-- Header -->
             <header class="header">
                 <div class="header-title">
-                    <h1>Financial Command Center</h1>
-                    <p>Welcome back, Ibrahim! Here is your financial overview.</p>
+                    <h1>Interactive Financial Command Center</h1>
+                    <p>Welcome back, Ibrahim! Manage your budget and track expenses in real time.</p>
                 </div>
                 <div class="user-profile">
-                    <span class="avatar">II</span>
+                    <span class="avatar">IA</span>
                     <span class="username">Ibrahim A.</span>
                 </div>
             </header>
 
-            <!-- Interactive Budget Control Panel (Beyond Assignment feature) -->
-            <section class="control-panel card">
-                <h2>Live Budget & Expense Calculator</h2>
-                <p class="text-muted">Enter your financial details below or trigger interactive prompts via console/inputs.</p>
-                <div class="input-group-row">
-                    <div class="input-field">
-                        <label for="monthlyBudget">Total Monthly Budget ($)</label>
-                        <input type="number" id="monthlyBudget" value="5000" placeholder="e.g. 5000">
+            <!-- Summary Metrics Cards (Updated Dynamically via DOM) -->
+            <section class="summary-grid" id="budgetSection">
+                <div class="card summary-card">
+                    <span class="text-muted">Total Monthly Budget</span>
+                    <h2 id="displayBudget">$5,000.00</h2>
+                    <div class="budget-update-inline">
+                        <input type="number" id="newBudgetInput" placeholder="Set new budget" min="1">
+                        <button id="updateBudgetBtn" class="btn-secondary">Update</button>
                     </div>
-                    <div class="input-field">
-                        <label for="totalExpenses">Total Expenses ($)</label>
-                        <input type="number" id="totalExpenses" value="1845.70" placeholder="e.g. 1500">
-                    </div>
-                    <button id="calculateBtn" class="btn-primary">Calculate Balance</button>
                 </div>
-                <div id="resultDisplay" class="result-box">
-                    <span>Remaining Balance: <strong id="balanceOutput">$3,154.30</strong></span>
-                    <span id="statusMessage" class="status-badge success">On Track</span>
+                <div class="card summary-card">
+                    <span class="text-muted">Total Expenses</span>
+                    <h2 id="displayTotalExpenses" class="text-danger">$0.00</h2>
+                    <span id="expenseCountLabel" class="card-footer text-muted">0 recorded items</span>
+                </div>
+                <div class="card summary-card">
+                    <span class="text-muted">Remaining Balance</span>
+                    <h2 id="displayBalance">$0.00</h2>
+                    <span id="healthStatusBadge" class="status-badge success">Healthy - On Track</span>
                 </div>
             </section>
 
-            <!-- Dashboard Cards Grid -->
-            <section class="cards-grid">
-                <div class="card" tabindex="0">
-                    <div class="card-header">
-                        <h3>Food & Dining</h3>
-                        <span class="badge">Expense</span>
+            <!-- Add New Expense Form & Interactive Controls -->
+            <section class="control-panel card">
+                <h2>Add New Expense</h2>
+                <form id="expenseForm" class="input-group-row">
+                    <div class="input-field">
+                        <label for="expenseTitle">Expense Description</label>
+                        <input type="text" id="expenseTitle" placeholder="e.g. Grocery Shopping" required>
                     </div>
-                    <p class="card-amount">$450.00</p>
-                    <span class="card-footer text-muted">12 transactions this month</span>
+                    <div class="input-field">
+                        <label for="expenseCategory">Category</label>
+                        <select id="expenseCategory" required>
+                            <option value="Food & Dining">Food & Dining</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Rent & Housing">Rent & Housing</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-field">
+                        <label for="expenseAmount">Amount ($)</label>
+                        <input type="number" id="expenseAmount" placeholder="e.g. 75.50" step="0.01" min="0.01" required>
+                    </div>
+                    <button type="submit" class="btn-primary">+ Add Expense</button>
+                </form>
+                <p id="feedbackMessage" class="feedback-text"></p>
+            </section>
+
+            <!-- Dynamic Expense Records Section (Rendered via Loops) -->
+            <section class="card transactions-panel" id="transactionsSection">
+                <div class="panel-header">
+                    <h2>Recorded Expenses</h2>
+                    <div class="filter-controls">
+                        <label for="categoryFilter" class="text-muted">Filter:</label>
+                        <select id="categoryFilter">
+                            <option value="All">All Categories</option>
+                            <option value="Food & Dining">Food & Dining</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Rent & Housing">Rent & Housing</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button id="clearAllBtn" class="btn-danger-outline">Clear All</button>
+                    </div>
                 </div>
-                <div class="card" tabindex="0">
-                    <div class="card-header">
-                        <h3>Transport</h3>
-                        <span class="badge">Expense</span>
-                    </div>
-                    <p class="card-amount">$180.50</p>
-                    <span class="card-footer text-muted">8 transactions this month</span>
-                </div>
-                <div class="card" tabindex="0">
-                    <div class="card-header">
-                        <h3>Rent & Housing</h3>
-                        <span class="badge">Expense</span>
-                    </div>
-                    <p class="card-amount">$1,200.00</p>
-                    <span class="card-footer text-muted">Due on the 1st</span>
-                </div>
-                <div class="card" tabindex="0">
-                    <div class="card-header">
-                        <h3>Entertainment</h3>
-                        <span class="badge">Expense</span>
-                    </div>
-                    <p class="card-amount">$95.00</p>
-                    <span class="card-footer text-muted">Subscriptions & movies</span>
-                </div>
-                <div class="card" tabindex="0">
-                    <div class="card-header">
-                        <h3>Savings</h3>
-                        <span class="badge success">Goal</span>
-                    </div>
-                    <p class="card-amount">$3,400.00</p>
-                    <span class="card-footer text-muted">+15% from last month</span>
-                </div>
-                <div class="card" tabindex="0">
-                    <div class="card-header">
-                        <h3>Utilities</h3>
-                        <span class="badge">Bills</span>
-                    </div>
-                    <p class="card-amount">$210.20</p>
-                    <span class="card-footer text-muted">Electricity, Water, Internet</span>
+
+                <div id="expenseListContainer" class="expense-list">
+                    <!-- JavaScript Loops will dynamically inject expense items here -->
                 </div>
             </section>
         </main>

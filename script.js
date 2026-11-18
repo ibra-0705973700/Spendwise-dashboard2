@@ -1,145 +1,209 @@
 /**
  * =================================================================
- * SpendWise Pro - JavaScript Foundation (Week 6)
- * Author: Ibrahim A. (PLP Software Engineering Scholar)
- * Description: Core logic handling data storage, user inputs, 
- *              budget calculations, reusable functions, and console logging.
+ * SpendWise Pro - Interactive Application (v3.0)
+ * Author: Ibrahim Abdikadir Dahir
+ * Description: Implements Arrays, Loops, Conditionals, DOM Manipulation,
+ *              and Event Listeners for dynamic personal finance tracking.
  * =================================================================
  */
 
-// 1. Store Application Data using Constants and Variables
-const appConfig = {
-    appName: "SpendWise Dashboard",
-    version: "2.0.0",
-    currency: "$"
-};
+// 1. Store Application Data using Variables & Arrays
+let monthlyBudget = 5000.00;
 
-let userProfile = {
-    fullName: "Ibrahim Abdikadir Dahir",
-    monthlyBudget: 5000,
-    totalExpenses: 1845.70,
-    savingsGoal: 2000
-};
-
-// Category-specific expense records
-let expenseCategories = [
-    { category: "Food & Dining", amount: 450.00, type: "Expense" },
-    { category: "Transport", amount: 180.50, type: "Expense" },
-    { category: "Rent & Housing", amount: 1200.00, type: "Expense" },
-    { category: "Entertainment", amount: 95.00, type: "Expense" },
-    { category: "Savings", amount: 3400.00, type: "Goal" },
-    { category: "Utilities", amount: 210.20, type: "Bills" }
+// Array of objects storing multiple expense records
+let expenses = [
+    { id: 1, title: "Monthly Apartment Rent", category: "Rent & Housing", amount: 1200.00 },
+    { id: 2, title: "Supermarket Groceries", category: "Food & Dining", amount: 320.50 },
+    { id: 3, title: "Electricity & Fiber Internet", category: "Utilities", amount: 185.00 },
+    { id: 4, title: "Fuel & City Transit", category: "Transport", amount: 140.20 },
+    { id: 5, title: "Cloud Hosting & Streaming", category: "Entertainment", amount: 65.00 }
 ];
 
-// 2. Reusable Functions for Calculations & Logic
+// 2. DOM Element References
+const displayBudget = document.getElementById("displayBudget");
+const displayTotalExpenses = document.getElementById("displayTotalExpenses");
+const displayBalance = document.getElementById("displayBalance");
+const expenseCountLabel = document.getElementById("expenseCountLabel");
+const healthStatusBadge = document.getElementById("healthStatusBadge");
 
-/**
- * Calculates the remaining balance.
- * @param {number} budget - Total available budget
- * @param {number} expenses - Total spent amount
- * @returns {number} The calculated remaining balance
- */
-function calculateRemainingBalance(budget, expenses) {
-    return budget - expenses;
-}
+const expenseForm = document.getElementById("expenseForm");
+const expenseTitleInput = document.getElementById("expenseTitle");
+const expenseCategoryInput = document.getElementById("expenseCategory");
+const expenseAmountInput = document.getElementById("expenseAmount");
+const feedbackMessage = document.getElementById("feedbackMessage");
 
-/**
- * Formats any numeric value into currency format.
- * @param {number} amount - The numeric amount
- * @returns {string} Formatted currency string
- */
+const newBudgetInput = document.getElementById("newBudgetInput");
+const updateBudgetBtn = document.getElementById("updateBudgetBtn");
+const categoryFilter = document.getElementById("categoryFilter");
+const clearAllBtn = document.getElementById("clearAllBtn");
+const expenseListContainer = document.getElementById("expenseListContainer");
+
+// 3. Helper Function: Format Currency
 function formatCurrency(amount) {
-    return `${appConfig.currency}${amount.toFixed(2)}`;
+    return `$${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-/**
- * Evaluates financial health status based on remaining balance.
- * @param {number} balance - Current remaining balance
- * @returns {string} Status message
- */
-function evaluateFinancialHealth(balance) {
-    if (balance < 0) {
-        return "Deficit - Over Budget!";
-    } else if (balance < 500) {
-        return "Warning - Low Balance";
+// 4. Process Data with Loops & Update Summary Dashboard
+function updateDashboardSummary() {
+    let totalSpent = 0;
+
+    // Loop through the expenses array to calculate total spending
+    for (let i = 0; i < expenses.length; i++) {
+        totalSpent += expenses[i].amount;
+    }
+
+    const remainingBalance = monthlyBudget - totalSpent;
+    const spendingPercentage = monthlyBudget > 0 ? (totalSpent / monthlyBudget) * 100 : 100;
+
+    // Update DOM text values
+    displayBudget.textContent = formatCurrency(monthlyBudget);
+    displayTotalExpenses.textContent = formatCurrency(totalSpent);
+    displayBalance.textContent = formatCurrency(remainingBalance);
+    expenseCountLabel.textContent = `${expenses.length} recorded item${expenses.length === 1 ? "" : "s"}`;
+
+    // 5. Implement Decision Making (Conditionals) for Budgeting Scenarios
+    if (remainingBalance < 0) {
+        healthStatusBadge.textContent = `Over Budget by ${formatCurrency(Math.abs(remainingBalance))}!`;
+        healthStatusBadge.className = "status-badge danger";
+        displayBalance.className = "text-danger";
+    } else if (spendingPercentage >= 80) {
+        healthStatusBadge.textContent = `Warning: ${spendingPercentage.toFixed(0)}% of Budget Used`;
+        healthStatusBadge.className = "status-badge warning";
+        displayBalance.className = "text-warning";
+    } else if (expenses.length === 0) {
+        healthStatusBadge.textContent = "No Expenses Recorded";
+        healthStatusBadge.className = "status-badge neutral";
+        displayBalance.className = "";
     } else {
-        return "Healthy - On Track";
+        healthStatusBadge.textContent = `Healthy: ${(100 - spendingPercentage).toFixed(0)}% Budget Remaining`;
+        healthStatusBadge.className = "status-badge success";
+        displayBalance.className = "text-success";
     }
 }
 
-// 3. Interactive Prompt Function (Fulfills prompt requirement)
-function collectUserPromptInput() {
-    console.log("--- Interactive Prompt Triggered ---");
-    let inputBudget = prompt("Enter your new Monthly Budget ($):", userProfile.monthlyBudget);
-    let inputExpenses = prompt("Enter your total Expenses ($):", userProfile.totalExpenses);
+// 6. Render Expense List Dynamically using Loops & DOM Manipulation
+function renderExpenseList(filterCategory = "All") {
+    // Clear existing DOM content
+    expenseListContainer.innerHTML = "";
 
-    if (inputBudget !== null && inputExpenses !== null) {
-        let parsedBudget = parseFloat(inputBudget);
-        let parsedExpenses = parseFloat(inputExpenses);
-
-        if (!isNaN(parsedBudget) && !isNaN(parsedExpenses)) {
-            userProfile.monthlyBudget = parsedBudget;
-            userProfile.totalExpenses = parsedExpenses;
-            
-            console.log(`Updated via Prompt -> Budget: ${formatCurrency(parsedBudget)}, Expenses: ${formatCurrency(parsedExpenses)}`);
-            processAndDisplayResults();
-        } else {
-            console.warn("Invalid input detected. Please enter valid numbers.");
+    // Filter array based on user selection
+    const filteredExpenses = [];
+    for (let i = 0; i < expenses.length; i++) {
+        if (filterCategory === "All" || expenses[i].category === filterCategory) {
+            filteredExpenses.push(expenses[i]);
         }
     }
+
+    // Conditional check if list is empty
+    if (filteredExpenses.length === 0) {
+        expenseListContainer.innerHTML = `<p class="empty-state">No expenses found for "${filterCategory}".</p>`;
+        return;
+    }
+
+    // Loop through filtered records and build HTML elements dynamically
+    filteredExpenses.forEach((item) => {
+        const expenseRow = document.createElement("div");
+        expenseRow.className = "expense-item";
+
+        expenseRow.innerHTML = `
+            <div class="expense-info">
+                <strong>${item.title}</strong>
+                <span class="category-tag">${item.category}</span>
+            </div>
+            <div class="expense-actions">
+                <span class="expense-amount">${formatCurrency(item.amount)}</span>
+                <button class="btn-delete" data-id="${item.id}" title="Delete Expense">✕</button>
+            </div>
+        `;
+
+        expenseListContainer.appendChild(expenseRow);
+    });
 }
 
-// 4. Core Processing & Console Logging Function
-function processAndDisplayResults() {
-    console.group(`=== ${appConfig.appName} v${appConfig.version} - Financial Report ===`);
-    console.log(`User: ${userProfile.fullName}`);
-    console.log(`Monthly Budget: ${formatCurrency(userProfile.monthlyBudget)}`);
-    console.log(`Total Expenses: ${formatCurrency(userProfile.totalExpenses)}`);
-
-    let remaining = calculateRemainingBalance(userProfile.monthlyBudget, userProfile.totalExpenses);
-    let healthStatus = evaluateFinancialHealth(remaining);
-
-    console.log(`Calculated Remaining Balance: ${formatCurrency(remaining)}`);
-    console.log(`Financial Health Status: ${healthStatus}`);
-    console.groupEnd();
-
-    updateUIElements(remaining, healthStatus);
+// Master Refresh Function connecting data processing and UI updates
+function refreshApplication() {
+    updateDashboardSummary();
+    renderExpenseList(categoryFilter.value);
 }
 
-// 5. DOM Manipulation & UI Feedback
-function updateUIElements(balance, status) {
-    const balanceOutput = document.getElementById("balanceOutput");
-    const statusMessage = document.getElementById("statusMessage");
+// 7. Handle User Interactions via Event Listeners
 
-    if (balanceOutput && statusMessage) {
-        balanceOutput.textContent = formatCurrency(balance);
-        statusMessage.textContent = status;
+// Event 1: Add New Expense Form Submission
+expenseForm.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent page reload
+
+    const title = expenseTitleInput.value.trim();
+    const category = expenseCategoryInput.value;
+    const amount = parseFloat(expenseAmountInput.value);
+
+    // Input Validation using Conditionals
+    if (title === "" || isNaN(amount) || amount <= 0) {
+        feedbackMessage.textContent = "Please enter a valid description and positive amount.";
+        feedbackMessage.className = "feedback-text error";
+        return;
+    }
+
+    // Add new record to the expenses array
+    const newExpense = {
+        id: Date.now(),
+        title: title,
+        category: category,
+        amount: amount
+    };
+    expenses.unshift(newExpense); // Add to top of list
+
+    // Reset form and show confirmation
+    expenseForm.reset();
+    feedbackMessage.textContent = `Added "${title}" (${formatCurrency(amount)}) to ${category}.`;
+    feedbackMessage.className = "feedback-text success";
+
+    refreshApplication();
+});
+
+// Event 2: Delete Individual Expense (Event Delegation)
+expenseListContainer.addEventListener("click", function (event) {
+    if (event.target.classList.contains("btn-delete")) {
+        const idToDelete = Number(event.target.getAttribute("data-id"));
         
-        if (balance < 0) {
-            statusMessage.className = "status-badge danger";
-        } else if (balance < 500) {
-            statusMessage.className = "status-badge warning";
-        } else {
-            statusMessage.className = "status-badge success";
-        }
-    }
-}
-
-// Event Listeners on DOM Load
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("SpendWise JavaScript initialized successfully.");
-    processAndDisplayResults();
-
-    const calcBtn = document.getElementById("calculateBtn");
-    if (calcBtn) {
-        calcBtn.addEventListener("click", () => {
-            const bInput = document.getElementById("monthlyBudget").value;
-            const eInput = document.getElementById("totalExpenses").value;
-            
-            userProfile.monthlyBudget = parseFloat(bInput) || 0;
-            userProfile.totalExpenses = parseFloat(eInput) || 0;
-
-            processAndDisplayResults();
-        });
+        // Rebuild array excluding the deleted item
+        expenses = expenses.filter((item) => item.id !== idToDelete);
+        
+        feedbackMessage.textContent = "Expense item removed.";
+        feedbackMessage.className = "feedback-text";
+        refreshApplication();
     }
 });
+
+// Event 3: Update Monthly Budget
+updateBudgetBtn.addEventListener("click", function () {
+    const updatedValue = parseFloat(newBudgetInput.value);
+
+    if (!isNaN(updatedValue) && updatedValue > 0) {
+        monthlyBudget = updatedValue;
+        newBudgetInput.value = "";
+        feedbackMessage.textContent = `Monthly budget updated to ${formatCurrency(monthlyBudget)}.`;
+        feedbackMessage.className = "feedback-text success";
+        refreshApplication();
+    } else {
+        feedbackMessage.textContent = "Please enter a valid budget amount greater than 0.";
+        feedbackMessage.className = "feedback-text error";
+    }
+});
+
+// Event 4: Filter Expenses by Category
+categoryFilter.addEventListener("change", function () {
+    renderExpenseList(categoryFilter.value);
+});
+
+// Event 5: Clear All Expenses
+clearAllBtn.addEventListener("click", function () {
+    if (expenses.length > 0) {
+        expenses = [];
+        feedbackMessage.textContent = "All expense records cleared.";
+        feedbackMessage.className = "feedback-text";
+        refreshApplication();
+    }
+});
+
+// Initialize Dashboard on Page Load
+document.addEventListener("DOMContentLoaded", refreshApplication);
